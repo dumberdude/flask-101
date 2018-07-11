@@ -1,5 +1,5 @@
 # wsgi.py
-from flask import Flask, jsonify, abort, make_response
+from flask import Flask, jsonify, abort, make_response, request
 app = Flask(__name__)
 
 THE_PRODUCTS = [
@@ -30,3 +30,14 @@ def del_a_product(id):
         abort(404)
     THE_PRODUCTS = [x for x in THE_PRODUCTS if x['id'] != id]
     return make_response(("Product has been deleted!", 204))
+
+@app.route('/api/v1/products', methods=['POST'])
+def create_a_product():
+    if not request.is_json:
+        return make_response(f"No JSON found", 400)
+    THE_PRODUCTS.append(
+        {
+            'id': len(THE_PRODUCTS) + 1,
+            'name': request.json['name'],
+        })
+    return make_response(f"Product has been created", 201)
