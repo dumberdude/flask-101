@@ -20,3 +20,5 @@ class TestViews(TestCase):
         self.assertEqual(len(the_product), 2)
         self.assertEqual(the_product['id'], 1)
         self.assertIsInstance(the_product['name'], str)
+        response = self.client.get("/api/v1/products/-1")
+        self.assertEqual(response.status_code, 404)
