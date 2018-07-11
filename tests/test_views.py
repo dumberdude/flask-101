@@ -12,3 +12,13 @@ class TestViews(TestCase):
         products = response.json
         self.assertIsInstance(products, list)
         self.assertGreater(len(products), 3) # 3 is not a mistake here.
+
+    def test_get_a_product(self):
+        response = self.client.get("/api/v1/products/1")
+        self.assertEqual(response.status_code, 200)
+        the_product = response.json
+        self.assertEqual(len(the_product), 2)
+        self.assertEqual(the_product['id'], 1)
+        self.assertIsInstance(the_product['name'], str)
+        response = self.client.get("/api/v1/products/-1")
+        self.assertEqual(response.status_code, 404)
