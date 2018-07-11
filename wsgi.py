@@ -40,4 +40,21 @@ def create_a_product():
             'id': len(THE_PRODUCTS) + 1,
             'name': request.json['name'],
         })
-    return make_response(f"Product has been created", 201)
+    return make_response(jsonify({'id': len(THE_PRODUCTS)}), 201)
+
+@app.route('/api/v1/products/<int:id>', methods=['PATCH'])
+def update_a_product(id):
+    if not request.is_json:
+        return make_response(f"Content-Type not application/json", 422)
+    if isinstance(request.json, str):
+        return make_response(f"No JSON found", 422)
+    if not request.json.get("name"):
+        return make_response(f"No 'name' entry found in the JSON", 422)
+    elif request.json['name'] == "":
+        return make_response(f"The 'name' entry must not be empty", 422)
+    if not get_a_product(id).json['id'] == id:
+        return make_response(f"ID {id} not found", 400)
+    for product in [x for x in THE_PRODUCTS if x['id'] == id]:
+        product['name'] = request.json['name']
+        break
+    return make_response(get_a_product(id), 201)
