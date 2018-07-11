@@ -37,3 +37,25 @@ class TestViews(TestCase):
                                              'application/json'},
                                     data=data)
         self.assertEqual(response.status_code, 201)
+
+    def test_update_a_product(self):
+        for d in [{'name': ''}, {'test': 'a test'}, '']:
+            print(f'd = {d}')
+            bad_req = \
+                self.client.patch("/api/v1/products/2",
+                                  headers={'content-type':
+                                           'application/json'},
+                                  data=json.dumps(d))
+            self.assertEqual(bad_req.status_code, 422)
+        name_before = \
+            self.client.get("/api/v1/products/2").json['name']
+        response = \
+            self.client.patch("/api/v1/products/2",
+                              headers={'content-type':
+                                       'application/json'},
+                              data=json.dumps({'name': 'NewTEST'}))
+        self.assertEqual(response.status_code, 201)
+        name_after = \
+            self.client.get("/api/v1/products/2").json['name']
+        self.assertEqual(response.status_code, 201)
+
