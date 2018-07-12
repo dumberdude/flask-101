@@ -6,10 +6,17 @@ name = "pypi"
 [packages]
 flask = "*"
 gunicorn = "*"
+python-dotenv = "*"
+"psycopg2" = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+flask-script = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
 
 [dev-packages]
 flask-testing = "*"
 nose = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.6"
